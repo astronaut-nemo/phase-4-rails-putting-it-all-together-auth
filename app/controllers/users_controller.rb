@@ -9,11 +9,12 @@ class UsersController < ApplicationController
 
     # GET /me
     def show
-        user = find_user
+        user = User.find_by(id: session[:user_id])
+        
         if user
             render json: user, status: :created
         else
-            render json: {error: "Not authorized"}, status: :not_authorized
+            render json: {error: "Not authorized"}, status: :unauthorized
         end
     end
 
@@ -22,7 +23,4 @@ class UsersController < ApplicationController
         params.permit(:username, :password, :password_confirmation, :image_url, :bio)
     end
 
-    def find_user
-        User.find(session[:user_id])
-    end
 end
